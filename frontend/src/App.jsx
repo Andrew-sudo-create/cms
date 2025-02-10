@@ -1,21 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect,useState } from "react";
+// import DataFetcher from "./components/DataFetcher";
 import './App.scss'
 
 function App() {
-
-  const [data, setData] = useState(null);
-
+  const [fetchedData, setFetchedData] = useState([]);
+  console.log(import.meta.env.VITE_API_URL)
   useEffect(() => {
-    fetch('/api/data')  // Note the relative path here
-      .then((response) => response.json())
-      .then((data) => setData(data));
+    fetch(import.meta.env.VITE_API_URL + "/api/data")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched Data:", data); // Check what's inside data
+        setFetchedData(data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
- 
 
   return (
     <>
       <div>
-      {data ? <p>{data.message}</p> : <p>Loading...</p>}
+      <h1>My CMS Frontend</h1>
+      {fetchedData && fetchedData.length > 0 ? (
+      fetchedData.map((item) => <p key={item.id}>{item.name}</p>)
+    ) : (
+      <p>Loading or no data available...</p>
+    )}
+  
     </div>
   
     </>

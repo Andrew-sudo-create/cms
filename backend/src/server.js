@@ -18,7 +18,13 @@ app.get('/', (req, res) => {
 
 
 app.get('/api/data', (req, res) => {
-    res.json({ message: 'Hello from the backend!' });
+    res.json({
+      "message": "Hello from backend",
+      "data": [
+        { "id": 1, "title": "Item 1" },
+        { "id": 2, "title": "Item 2" }
+      ]
+    });
   });
 
 const PORT = process.env.PORT || 5000;
