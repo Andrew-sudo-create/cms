@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); //Parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Handle form data
-app.use(cors({ origin: "https://cms-fa7459jvn-andrewsudocreates-projects.vercel.app/" })); // Allow all domains
+app.use(cors({ origin: "*" })); // Allow all domains
 
 app.get('/', (req, res) => {
   res.send('CMS Backend is running...');
