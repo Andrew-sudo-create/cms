@@ -6,7 +6,7 @@ function App() {
   const [fetchedData, setFetchedData] = useState([]);
   console.log(import.meta.env.VITE_API_URL)
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL + "/api/data")
+    fetch(import.meta.env.VITE_API_URL + "api/data")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Data:", data.data); // Check what's inside data
