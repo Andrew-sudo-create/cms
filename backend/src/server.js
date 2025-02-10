@@ -11,6 +11,7 @@ const app = express();
 //Middleware
 app.use(cors());
 app.use(express.json()); //Parse JSON requests
+app.use(cors({ origin: "https://cms-mk5rrz2l5-andrewsudocreates-projects.vercel.app/" })); // Allow all domains
 
 app.get('/', (req, res) => {
   res.send('CMS Backend is running...');
