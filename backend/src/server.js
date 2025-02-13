@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import authRoutes from './routes/auth.js'
 import websiteRoutes from './routes/websites.js';
 import contentRoutes from './routes/content.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,9 @@ app.use(cors());
 app.use(express.json()); //Parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Handle form data
 app.use(cors({ origin: "*" })); // Allow all domains
+app.use(errorHandler);
+
+//Routes
 app.use('/auth', authRoutes);
 app.use('/websites', websiteRoutes);
 app.use('/content', contentRoutes);

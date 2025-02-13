@@ -16,7 +16,7 @@ router.get('/:websiteId/:page', async (req, res) => {
         res.json(content);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 });
 
@@ -46,7 +46,7 @@ router.post(
             res.status(201).json(savedContent);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Server error' });
+            next(error);
         }
     }
 );
@@ -76,7 +76,7 @@ router.put(
             res.json(updatedContent);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Server error' });
+            next(error);
         }
     }
 );
@@ -91,7 +91,7 @@ router.delete('/:id', authenticate, async (req, res) => {
         res.status(204).end();
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 });
 
