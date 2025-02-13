@@ -16,9 +16,9 @@ app.use(express.urlencoded({ extended: true })); // Handle form data
 app.use(cors({ origin: "*" })); // Allow all domains
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect("mongodb+srv://andrew:iPJBzpEtPRE4bP3q@cms.biv7m.mongodb.net/?retryWrites=true&w=majority&appName=cms", {
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
 }).then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
