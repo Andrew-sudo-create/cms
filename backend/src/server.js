@@ -1,27 +1,34 @@
-import dotenv from "dotenv";
-import 'dotenv/config';
-dotenv.config();
+
+
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
 import express from 'express';
 import cors from 'cors';
 import mongoose from "mongoose";
+import authRoutes from './routes/auth.js'
+import websiteRoutes from './routes/websites.js';
+import contentRoutes from './routes/content.js';
 
-
+dotenv.config();
 const app = express();
-
 
 //Middleware
 app.use(cors());
 app.use(express.json()); //Parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Handle form data
 app.use(cors({ origin: "*" })); // Allow all domains
+app.use('/auth', authRoutes);
+app.use('/websites', websiteRoutes);
+app.use('/content', contentRoutes);
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://andrew:iPJBzpEtPRE4bP3q@cms.biv7m.mongodb.net/?retryWrites=true&w=majority&appName=cms", {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+// mongoose.connect(process.env.MONGO_URI, {
+//   // useNewUrlParser: true,
+//   // useUnifiedTopology: true,
+// }).then(() => console.log("MongoDB Connected"))
+// .catch(err => console.log(err));
 
+connectDB();
 app.get('/', (req, res) => {
   res.send('CMS Backend is running...');
 });
