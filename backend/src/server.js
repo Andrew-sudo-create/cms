@@ -1,10 +1,11 @@
+import dotenv from "dotenv";
+import 'dotenv/config';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import mongoose from "mongoose";
 
 
-
-dotenv.config();
 const app = express();
 
 
@@ -13,6 +14,13 @@ app.use(cors());
 app.use(express.json()); //Parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Handle form data
 app.use(cors({ origin: "*" })); // Allow all domains
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => console.log("MongoDB Connected"))
+.catch(err => console.log(err));
 
 app.get('/', (req, res) => {
   res.send('CMS Backend is running...');
@@ -28,6 +36,8 @@ app.get('/api/data', (req, res) => {
       ]
     });
   });
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
