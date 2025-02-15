@@ -22,7 +22,7 @@ app.use("/websites", websiteRoutes);
 app.use("/content", contentRoutes);
 
 // Connect to MongoDB
-// console.log(process.env.MONGO_URI);
+console.log(process.env.MONGO_URI);
 connectDB();
 
 app.get("/", (req, res) => {
