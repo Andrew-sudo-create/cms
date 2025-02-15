@@ -1,17 +1,18 @@
-import express from 'express';
-import  Content  from '../models/content.js';
-import { authenticate } from '../middleware/authMiddleware.js';
-import { body, validationResult } from 'express-validator';
+import express from "express";
+import { Content } from "../models/content.js";
+import { authenticate } from "../middleware/authMiddleware.js";
+import { body, validationResult } from "express-validator";
 
 const router = express.Router();
 
 // GET content for a specific page of a website
-router.get('/:websiteId/:page', async (req, res) => {
+router.get("/:websiteId/:page", async (req, res, next) => {
     try {
         const { websiteId, page } = req.params;
         const content = await Content.findOne({ website: websiteId, page });
+        console.log("Content:", content);
         if (!content) {
-            return res.status(404).json({ message: 'Content not found' });
+            return res.status(404).json({ message: "Content not found" });
         }
         res.json(content);
     } catch (error) {
@@ -22,14 +23,14 @@ router.get('/:websiteId/:page', async (req, res) => {
 
 // POST new content (protected route)
 router.post(
-    '/',
+    "/",
     authenticate,
     [
-        body('website').isMongoId().withMessage('Invalid website ID'),
-        body('page').notEmpty().withMessage('Page is required'),
-        body('content').notEmpty().withMessage('Content is required'),
+        body("website").isMongoId().withMessage("Invalid website ID"),
+        body("page").notEmpty().withMessage("Page is required"),
+        body("content").notEmpty().withMessage("Content is required"),
     ],
-    async (req, res) => {
+    async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -53,12 +54,10 @@ router.post(
 
 // PUT (update) content (protected route)
 router.put(
-    '/:id',
+    "/:id",
     authenticate,
-    [
-        body('content').notEmpty().withMessage('Content is required'),
-    ],
-    async (req, res) => {
+    [body("content").notEmpty().withMessage("Content is required")],
+    async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -67,11 +66,16 @@ router.put(
             const { content } = req.body;
             const updatedContent = await Content.findByIdAndUpdate(
                 req.params.id,
-                { content, lastUpdated: Date.now(), updatedBy: req.user._id, version: content.version + 1 }, // Update lastUpdated and updatedBy
+                {
+                    content,
+                    lastUpdated: Date.now(),
+                    updatedBy: req.user._id,
+                    version: content.version + 1,
+                }, // Update lastUpdated and updatedBy
                 { new: true, runValidators: true }
             );
             if (!updatedContent) {
-                return res.status(404).json({ message: 'Content not found' });
+                return res.status(404).json({ message: "Content not found" });
             }
             res.json(updatedContent);
         } catch (error) {
@@ -82,11 +86,13 @@ router.put(
 );
 
 // DELETE content (protected route)
-router.delete('/:id', authenticate, async (req, res) => {
+router.delete("/:id", authenticate, async (req, res, next) => {
     try {
-        const deletedContent = await Content.findByIdAndDelete(req.params.id);
+        const deletedContent = await Content.findByIdAndDelete(
+            req.params.id
+        );
         if (!deletedContent) {
-            return res.status(404).json({ message: 'Content not found' });
+            return res.status(404).json({ message: "Content not found" });
         }
         res.status(204).end();
     } catch (error) {

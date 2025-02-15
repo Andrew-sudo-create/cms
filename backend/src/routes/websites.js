@@ -7,7 +7,7 @@ import { body, validationResult } from 'express-validator'; // For input validat
 const router = express.Router();
 
 // GET all websites (admin only)
-router.get('/', authenticate, async (req, res) => {
+router.get('/', authenticate, async (req, res, next) => {
     try {
         const user = req.user;
         if (user.role!== 'admin') {
@@ -22,7 +22,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // GET websites owned by the logged-in user
-router.get('/my', authenticate, async (req, res) => {
+router.get('/my', authenticate, async (req, res, next) => {
     try {
         const userId = req.user._id;
         const websites = await Website.find({ owner: userId }).populate('owner', 'email firstName lastName'); // Populate
@@ -34,7 +34,7 @@ router.get('/my', authenticate, async (req, res) => {
 });
 
 // GET a specific website by ID
-router.get('/:id', authenticate, async (req, res) => {
+router.get('/:id', authenticate, async (req, res, next) => {
     try {
         const website = await Website.findById(req.params.id).populate('owner', 'email firstName lastName'); // Populate
         if (!website) {
@@ -102,7 +102,7 @@ router.put(
         body('title').notEmpty().withMessage('Title is required'),
         body('description').optional(),
     ],
-    async (req, res) => {
+    async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });

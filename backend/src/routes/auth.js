@@ -15,7 +15,7 @@ router.post(
     body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),
   ],
-  async (req, res) => {
+  async (req, res,next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -55,7 +55,7 @@ router.post(
     body('email').isEmail().withMessage('Invalid email address'),
     body('password').notEmpty().withMessage('Password is required'),
   ],
-  async (req, res) => {
+  async (req, res,next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
