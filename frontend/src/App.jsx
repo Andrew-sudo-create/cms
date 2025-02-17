@@ -1,6 +1,5 @@
 
 import './App.scss'
-import DataFetcher from "./components/DataFetcher";
 
 function App() {
 
@@ -8,7 +7,7 @@ function App() {
     <>
       <div>
       <h1>My CMS Frontend</h1>
-      <DataFetcher/>
+  
   
     </div>
   
